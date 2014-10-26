@@ -2,13 +2,45 @@
 
 #include <string>
 #include <stdexcept>
+#include <iostream>
 
 #include <clang-c/Index.h>
+
+#include "clang/string.hpp"
+#include "vim/highlight.hpp"
 
 namespace color_coded
 {
   namespace clang
   {
+    namespace cursor
+    {
+      CXChildVisitResult visit(CXCursor const cursor, CXCursor const parent,
+                               CXClientData const data)
+      {
+        auto const group(static_cast<vim::highlight_group*>(data));
+        auto const cursor_kind(cursor.kind);
+        auto const cursor_type(clang_getCursorType(cursor).kind);
+        std::cout 
+        << clang::string(clang_getTypeSpelling(
+              clang_getCursorType(cursor))).c_str()
+        << " - "
+        << clang::string(clang_getTypeKindSpelling(cursor_type)).c_str()
+        << std::endl;
+
+        auto const range(clang_getCursorExtent(cursor));
+        CXFile file{};
+        unsigned start_line{}, start_col{}, start_offset{};
+        unsigned end_line{}, end_col{}, end_offset{};
+        clang_getExpansionLocation(clang_getRangeStart(range), &file,
+            &start_line, &start_col, &start_offset);
+        clang_getExpansionLocation(clang_getRangeEnd(range), &file,
+            &end_line, &end_col, &end_offset);
+
+        return CXChildVisit_Continue;
+      }
+    }
+
     namespace token
     {
       /* Clang token/cursor -> Vim highlight group. */

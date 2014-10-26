@@ -22,6 +22,7 @@
 
 #include <string>
 #include <map>
+#include <iostream>
 
 /* XXX: It's a shared object to a C lib; I need globals. :| */
 namespace color_coded
@@ -65,6 +66,9 @@ namespace color_coded
             /* Attempt compilation. */
             clang::translation_unit trans_unit{ clang::compile({ config_args },
                                                                filename) };
+            vim::highlight_group group;
+            clang_visitChildren(clang_getTranslationUnitCursor(trans_unit.impl),
+                                &clang::cursor::visit, &group);
             clang::token_pack tp{ trans_unit, clang::source_range(trans_unit) };
             return async::result{ t.name, { trans_unit, tp } };
           }

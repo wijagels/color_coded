@@ -8,7 +8,7 @@
 #include "clang/string.hpp"
 #include "clang/token_pack.hpp"
 #include "clang/translation_unit.hpp"
-#include "clang/token.hpp"
+//#include "clang/token.hpp"
 
 #include "vim/commands.hpp"
 
@@ -29,7 +29,7 @@ namespace color_coded
 
       std::string type;
       std::size_t line, column;
-      std::string token;
+      std::string token; /* TODO: Only need the size. */
     };
 
     class highlight_group
@@ -62,9 +62,20 @@ namespace color_coded
             unsigned line{}, column{}, offset{};
             clang_getFileLocation(loc, &file, &line, &column, &offset);
 
-            group_.emplace_back(clang::token::to_string(kind, cursor_kind,
-                                                        cursor_type),
-                                line, column, spell.c_str());
+            switch(kind)
+            {
+              case CXToken_Punctuation:
+              case CXToken_Keyword:
+              case CXToken_Identifier:
+              case CXToken_Literal:
+              case CXToken_Comment:
+              default:
+                /* TODO: visit children of cursor and recurse... */
+            }
+
+            //group_.emplace_back(clang::token::to_string(kind, cursor_kind,
+                                                        //cursor_type),
+                                //line, column, spell.c_str());
           }
         }
 
