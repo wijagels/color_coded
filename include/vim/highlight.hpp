@@ -384,159 +384,160 @@ namespace color_coded
       switch(cursor_kind)
       {
         case CXCursor_StructDecl: 	
-          group.emplace_back("StructDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("StructDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_UnionDecl: 	
-          group.emplace_back("UnionDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("UnionDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ClassDecl: 	
-          group.emplace_back("ClassDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ClassDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_EnumDecl: 	
-          group.emplace_back("EnumDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("EnumDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_FieldDecl: 	
-          group.emplace_back("FieldDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("FieldDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_EnumConstantDecl: 	
-          group.emplace_back("EnumConstantDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("EnumConstantDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_FunctionDecl: 	
-          group.emplace_back("FunctionDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("FunctionDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_VarDecl: 	
-          group.emplace_back("VarDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("VarDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ParmDecl: 	
-          group.emplace_back("ParmDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ParmDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCInterfaceDecl: 	
-          group.emplace_back("ObjCInterfaceDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCInterfaceDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCCategoryDecl: 	
-          group.emplace_back("ObjCCategoryDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCCategoryDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCProtocolDecl: 	
-          group.emplace_back("ObjCProtocolDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCProtocolDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCPropertyDecl: 	
-          group.emplace_back("ObjCPropertyDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCPropertyDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCIvarDecl:
-          group.emplace_back("ObjCIvarDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCIvarDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCInstanceMethodDecl: 	
-          group.emplace_back("ObjCInstanceMethodDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCInstanceMethodDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCClassMethodDecl: 	
-          group.emplace_back("ObjCClassMethodDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCClassMethodDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCImplementationDecl: 	
-          group.emplace_back("ObjCImplementationDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCImplementationDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCCategoryImplDecl: 	
-          group.emplace_back("ObjCCategoryImplDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCCategoryImplDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_TypedefDecl: 	
-          group.emplace_back("TypedefDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("TypedefDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_CXXMethod: 	
-          group.emplace_back("CXXMethod", start_line, start_col, spell.c_str());
+          //group.emplace_back("CXXMethod", start_line, start_col, spell.c_str());
           break;
         case CXCursor_Namespace: 	
-          group.emplace_back("Namespace", start_line, start_col, spell.c_str());
+          //group.emplace_back("Namespace", start_line, start_col, spell.c_str());
           break;
         case CXCursor_LinkageSpec: 	
-          group.emplace_back("LinkageSpec", start_line, start_col, spell.c_str());
+          //group.emplace_back("LinkageSpec", start_line, start_col, spell.c_str());
           break;
         case CXCursor_Constructor: 	
-          group.emplace_back("Constructor", start_line, start_col, spell.c_str());
+          //group.emplace_back("Constructor", start_line, start_col, spell.c_str());
           break;
         case CXCursor_Destructor: 	
-          group.emplace_back("Destructor", start_line, start_col, spell.c_str());
+          //group.emplace_back("Destructor", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ConversionFunction: 	
-          group.emplace_back("ConversionFunction", start_line, start_col, spell.c_str());
+          //group.emplace_back("ConversionFunction", start_line, start_col, spell.c_str());
           break;
         case CXCursor_TemplateTypeParameter: 	
-          group.emplace_back("TemplateTypeParameter", start_line, start_col, spell.c_str());
+          //group.emplace_back("TemplateTypeParameter", start_line, start_col, spell.c_str());
           break;
         case CXCursor_NonTypeTemplateParameter: 	
-          group.emplace_back("NonTypeTemplateParameter", start_line, start_col, spell.c_str());
+          //group.emplace_back("NonTypeTemplateParameter", start_line, start_col, spell.c_str());
           break;
         case CXCursor_TemplateTemplateParameter: 	
-          group.emplace_back("TemplateTemplateParameter", start_line, start_col, spell.c_str());
+          //group.emplace_back("TemplateTemplateParameter", start_line, start_col, spell.c_str());
           break;
         case CXCursor_FunctionTemplate: 	
-          group.emplace_back("FunctionTemplate", start_line, start_col, spell.c_str());
+          //group.emplace_back("FunctionTemplate", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ClassTemplate: 	
-          group.emplace_back("ClassTemplate", start_line, start_col, spell.c_str());
+          //group.emplace_back("ClassTemplate", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ClassTemplatePartialSpecialization: 	
-          group.emplace_back("ClassTemplatePartialSpecialization", start_line, start_col, spell.c_str());
+          //group.emplace_back("ClassTemplatePartialSpecialization", start_line, start_col, spell.c_str());
           break;
         case CXCursor_NamespaceAlias: 	
-          group.emplace_back("NamespaceAlias", start_line, start_col, spell.c_str());
+          //group.emplace_back("NamespaceAlias", start_line, start_col, spell.c_str());
           break;
         case CXCursor_UsingDirective: 	
-          group.emplace_back("UsingDirective", start_line, start_col, spell.c_str());
+          //group.emplace_back("UsingDirective", start_line, start_col, spell.c_str());
           break;
         case CXCursor_UsingDeclaration: 	
-          group.emplace_back("UsingDeclaration", start_line, start_col, spell.c_str());
+          //group.emplace_back("UsingDeclaration", start_line, start_col, spell.c_str());
           break;
         case CXCursor_TypeAliasDecl: 	
-          group.emplace_back("TypeAliasDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("TypeAliasDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCSynthesizeDecl: 	
-          group.emplace_back("ObjCSynthesizeDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCSynthesizeDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCDynamicDecl: 	
-          group.emplace_back("ObjCDynamicDecl", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCDynamicDecl", start_line, start_col, spell.c_str());
           break;
         case CXCursor_CXXAccessSpecifier: 	
-          group.emplace_back("CXXAccessSpecifier", start_line, start_col, spell.c_str());
+          //group.emplace_back("CXXAccessSpecifier", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCSuperClassRef:
-          group.emplace_back("ObjCSuperClassRef", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCSuperClassRef", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCProtocolRef:
-          group.emplace_back("ObjCProtocolRef", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCProtocolRef", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCClassRef:
-          group.emplace_back("ObjCClassRef", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCClassRef", start_line, start_col, spell.c_str());
           break;
         case CXCursor_TypeRef:
-          group.emplace_back("TypeRef", start_line, start_col, spell.c_str());
+          //group.emplace_back("TypeRef", start_line, start_col, spell.c_str());
           break;
         case CXCursor_CXXBaseSpecifier: 	
-          group.emplace_back("CXXBaseSpecifier", start_line, start_col, spell.c_str());
+          //group.emplace_back("CXXBaseSpecifier", start_line, start_col, spell.c_str());
           break;
         case CXCursor_NamespaceRef: 	
-          group.emplace_back("NamespaceRef", start_line, start_col, spell.c_str());
+          //group.emplace_back("NamespaceRef", start_line, start_col, spell.c_str());
           break;
         case CXCursor_MemberRef: 	
-          group.emplace_back("MemberRef", start_line, start_col, spell.c_str());
+          //group.emplace_back("MemberRef", start_line, start_col, spell.c_str());
           break;
         case CXCursor_LabelRef: 	
-          group.emplace_back("LabelRef", start_line, start_col, spell.c_str());
+          //group.emplace_back("LabelRef", start_line, start_col, spell.c_str());
           break;
         case CXCursor_OverloadedDeclRef: 	
-          group.emplace_back("OverloadedDeclRef", start_line, start_col, spell.c_str());
+          //group.emplace_back("OverloadedDeclRef", start_line, start_col, spell.c_str());
           break;
         case CXCursor_VariableRef: 	
-          group.emplace_back("VariableRef", start_line, start_col, spell.c_str());
+          //group.emplace_back("VariableRef", start_line, start_col, spell.c_str());
           break;
         case CXCursor_NoDeclFound:
-          group.emplace_back("NoDeclFound", start_line, start_col, spell.c_str());
+          //group.emplace_back("NoDeclFound", start_line, start_col, spell.c_str());
           break;
         case CXCursor_NotImplemented:
-          group.emplace_back("NotImplemented", start_line, start_col, spell.c_str());
+          //group.emplace_back("NotImplemented", start_line, start_col, spell.c_str());
           break;
         case CXCursor_InvalidCode:
-          group.emplace_back("InvalidCode", start_line, start_col, spell.c_str());
+          //group.emplace_back("InvalidCode", start_line, start_col, spell.c_str());
           break;
         case CXCursor_DeclRefExpr: 	
+          /*
           switch(cursor_type)
           {
             case CXType_Enum:
@@ -555,19 +556,19 @@ namespace color_coded
             default:
               group.emplace_back("Variable", start_line, start_col, spell.c_str());
               break;
-          }
+          }*/
           break;
         case CXCursor_MemberRefExpr: 	
-          group.emplace_back("MemberRefExpr", start_line, start_col, spell.c_str());
+          //group.emplace_back("MemberRefExpr", start_line, start_col, spell.c_str());
           break;
         case CXCursor_CallExpr: 	
-          group.emplace_back("CallExpr", start_line, start_col, spell.c_str());
+          //group.emplace_back("CallExpr", start_line, start_col, spell.c_str());
           break;
         case CXCursor_ObjCMessageExpr: 	
-          group.emplace_back("ObjCMessageExpr", start_line, start_col, spell.c_str());
+          //group.emplace_back("ObjCMessageExpr", start_line, start_col, spell.c_str());
           break;
         case CXCursor_BlockExpr: 	
-          group.emplace_back("BlockExpr", start_line, start_col, spell.c_str());
+          //group.emplace_back("BlockExpr", start_line, start_col, spell.c_str());
           break;
         case CXCursor_MacroDefinition:
           group.emplace_back("MacroDefinition", start_line, start_col, spell.c_str());
@@ -576,16 +577,15 @@ namespace color_coded
           group.emplace_back("MacroInstantiation", start_line, start_col, spell.c_str());
           break;
         case CXCursor_PreprocessingDirective:
-          group.emplace_back("MacroDefinition", start_line, start_col, spell.c_str());
+          //group.emplace_back("MacroDefinition", start_line, start_col, spell.c_str());
           break;
-        case CXCursor_InclusionDirective:
-          group.emplace_back("MacroDefinition", start_line, start_col, spell.c_str());
+        case CXCursor_InclusionDirective: /* XXX: do not want */
+          //group.emplace_back("MacroDefinition", start_line, start_col, spell.c_str());
           break;
         case CXCursor_TemplateRef:
-          group.emplace_back("Type", start_line, start_col, spell.c_str());
+          //group.emplace_back("Type", start_line, start_col, spell.c_str());
           break;
         case CXCursor_UnexposedDecl: /* Some decl, not sure what kind. */
-          break;
         case CXCursor_ParenExpr:
         case CXCursor_LambdaExpr:
         case CXCursor_CXXForRangeStmt:
@@ -594,8 +594,7 @@ namespace color_coded
           return CXChildVisit_Recurse;
       }
 
-      return CXChildVisit_Continue;
+      return CXChildVisit_Recurse;
     }
   }
-
 }
