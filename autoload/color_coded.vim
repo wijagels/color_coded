@@ -4,7 +4,7 @@
 " Setup
 " ------------------------------------------------------------------------------
 
-let s:color_coded_api_version = 0x10b6962
+let s:color_coded_api_version = 0x8b9b7df
 let s:color_coded_valid = 1
 
 function! s:color_coded_create_defaults()

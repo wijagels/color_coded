@@ -6,8 +6,8 @@ struct foo
   void work()
   { }
 
-  char const * name{};
-  int age{};
+  char const * name{ "jeaye" };
+  std::size_t age{ std::string{name}.size() };
   static long count;
 };
 
@@ -16,6 +16,8 @@ class bar
 {
   public:
     bar()
+    { }
+    bar(int const)
     { }
 
     virtual T spam() const
@@ -27,6 +29,17 @@ enum class kitten
   meow,
   purr
 };
+
+typedef kitten feline;
+using cat = kitten;
+
+union meowzers
+{
+  feline f;
+  cat c;
+};
+
+using std::swap;
 
 /* Oh, excellent. */
 int main()

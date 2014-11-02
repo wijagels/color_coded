@@ -83,7 +83,7 @@ run:
 	gvim --noplugin \
 		-c "set runtimepath^=${PWD}" \
 		-c "source ${PWD}/plugin/color_coded.vim" \
-		test/simple.cpp
+		test/simple.cpp >| out
 
 run_real:
 	gvim --noplugin \
