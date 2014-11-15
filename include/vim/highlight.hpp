@@ -41,165 +41,11 @@ namespace color_coded
       std::string token; /* TODO: Only need the size. */
     };
 
-    class highlight_group
+    template <typename G, typename C, typename K, typename T>
+    void stuff(G &group, C cursor, K cursor_kind, T cursor_type,
+               std::size_t const start_line,
+               std::size_t const start_col, clang::string const &spell)
     {
-      public:
-        using vec_t = std::vector<highlight>;
-        using iterator = vec_t::iterator;
-        using const_iterator = vec_t::const_iterator;
-        using size_type = std::size_t;
-
-        highlight_group() = default;
-        highlight_group(clang::translation_unit const &trans_unit,
-                        clang::token_pack &tokens)
-        {
-#if DUMP_SHIT
-
-          clang_visitChildren(clang_getTranslationUnitCursor(trans_unit.impl), &cursor::visit, this);
-          return;
-#endif
-          auto &tu(trans_unit.impl);
-          std::vector<CXCursor> cursors(tokens.size());
-          clang_annotateTokens(tu, tokens.begin(), tokens.size(), cursors.data());
-
-          auto cursor(cursors.cbegin());
-          for(auto token(tokens.cbegin()); token != tokens.cend(); ++token, ++cursor)
-          {
-            CXTokenKind const kind{ clang_getTokenKind(*token) };
-            clang::string const spell{ clang_getTokenSpelling(tu, *token) };
-            std::cout << spell.c_str() << ", ";
-            std::cout << clang::string{clang_getCursorSpelling(*cursor)}.c_str() << ", ";
-            std::cout << clang::string{clang_getCursorDisplayName(*cursor)}.c_str() << ", ";
-            std::cout << clang::string{clang_getCursorKindSpelling(clang_getCursorKind(*cursor))}.c_str() << ", ";
-            std::cout << clang::string{clang_getTypeKindSpelling(clang_getCursorType(*cursor).kind)}.c_str() << std::endl;
-            auto const loc(clang_getTokenLocation(tu, *token));
-
-            auto const cursor_kind(cursor->kind);
-            auto const cursor_type(clang_getCursorType(*cursor).kind);
-
-            CXFile file{};
-            unsigned line{}, column{}, offset{};
-            clang_getFileLocation(loc, &file, &line, &column, &offset);
-
-            //std::cout << "kind: " << kind << std::endl;
-            switch(kind)
-            {
-              case CXToken_Punctuation:
-                emplace_back("Punctuation", line, column, spell.c_str());
-                break;
-              case CXToken_Keyword:
-                emplace_back("Keyword", line, column, spell.c_str());
-                break;
-              case CXToken_Identifier:
-                //cursor::visit(*cursor, {}, this);
-                clang_visitChildren(*cursor, &cursor::visit, this);
-                //clang_visitChildren(clang_getCursorLexicalParent(*cursor), &cursor::visit, this);
-                break;
-              case CXToken_Literal:
-                //cursor::visit(*cursor, {}, this);
-                clang_visitChildren(*cursor, &cursor::visit, this);
-                //clang_visitChildren(clang_getCursorLexicalParent(*cursor), &cursor::visit, this);
-                break;
-              case CXToken_Comment:
-                emplace_back("Comment", line, column, spell.c_str());
-                break;
-              default:
-                emplace_back("Error", line, column, spell.c_str());
-            }
-            std::cout << std::endl;
-          }
-        }
-
-        bool empty() const
-        { return group_.empty(); }
-        size_type size() const
-        { return group_.size(); }
-
-        iterator begin()
-        { return group_.begin(); }
-        const_iterator begin() const
-        { return group_.begin(); }
-        const_iterator cbegin() const
-        { return group_.cbegin(); }
-        iterator end()
-        { return group_.end(); }
-        const_iterator end() const
-        { return group_.end(); }
-        const_iterator cend() const
-        { return group_.cend(); }
-
-        template <typename... Args>
-        void emplace_back(Args &&... args)
-        {
-          std::cout << "  ";
-          int const _[]{ (std::cout << args << " ", 0)... };
-          static_cast<void>(_); std::cout << std::endl;
-          group_.emplace_back(std::forward<Args>(args)...);
-        }
-
-      private:
-        std::vector<highlight> group_;
-    };
-  }
-
-  /* TODO: bar<T>() spelling is wrong. */
-  namespace cursor
-  {
-    CXChildVisitResult visit(CXCursor const cursor, CXCursor const parent,
-                             CXClientData const data)
-    {
-      auto &group(*static_cast<vim::highlight_group*>(data));
-      auto const cursor_kind(cursor.kind);
-      auto const cursor_type(clang_getCursorType(cursor).kind);
-      clang::string const spell{ clang_getCursorSpelling(cursor) };
-      auto const loc(clang_getCursorLocation(cursor));
-
-      auto const range(clang_getCursorExtent(cursor));
-      auto const start(clang_getRangeStart(range));
-      auto const end(clang_getRangeEnd(range));
-
-      static CXCursor const null_cursor(clang_getNullCursor());
-      static CXSourceLocation const null_location(clang_getNullLocation());
-      if(clang_equalLocations(start, null_location) ||
-         clang_equalLocations(end, null_location))
-      { return CXChildVisit_Recurse; }
-
-      clang::string file{};
-      CXFile cxfile;
-      unsigned start_line{}, start_col{}, start_offset{};
-      unsigned end_line{}, end_col{}, end_offset{};
-      //clang_getPresumedLocation(start, &file.get(), &start_line, &start_col);
-      //clang_getPresumedLocation(end, &file.get(), &end_line, &end_col);
-      //clang_getExpansionLocation(start, &cxfile, &start_line, &start_col, &start_offset);
-      //clang_getExpansionLocation(end, &cxfile, &end_line, &end_col, &end_offset);
-      clang_getSpellingLocation(start, &cxfile, &start_line, &start_col, &start_offset);
-      clang_getSpellingLocation(end, &cxfile, &end_line, &end_col, &end_offset);
-
-#if DUMP_SHIT
-      std::cout << spell.c_str() << ", ";
-      std::cout << start_line << ":" << start_col << " -> "
-                << end_line << ":" << end_col << ", ";
-      std::cout << clang::string
-        {clang_getCursorKindSpelling(clang_getCursorKind(cursor))}.c_str()
-                << ", ";
-      std::cout << clang::string
-        {clang_getTypeKindSpelling(clang_getCursorType(cursor).kind)}.c_str()
-                << ", ";
-      std::cout << clang::string
-        {clang_getCursorDisplayName(cursor)}.c_str()
-                << std::endl;
-      //return CXChildVisit_Recurse;
-#endif
-
-      //std::cout 
-      //<< cursor_kind << " "
-      //<< clang::string(clang_getTypeSpelling(
-      //                 clang_getCursorType(cursor))).c_str()
-      //<< " - "
-      //<< clang::string(clang_getTypeKindSpelling(cursor_type)).c_str()
-      //<< " " << cursor_type << " "
-      //<< std::endl;
-
       auto const func([&](auto cursor_type)
       {
         switch(cursor_type)
@@ -291,7 +137,9 @@ namespace color_coded
         group.emplace_back("EnumDecl", start_line, start_col, spell.c_str());
         break;
       case CXCursor_FieldDecl: 	
-        group.emplace_back("FieldDecl", start_line, start_col, spell.c_str());
+        //cursor::visit(cursor, {}, &group);
+        clang_visitChildren(cursor, &cursor::visit, &group);
+        //group.emplace_back("FieldDecl", start_line, start_col, spell.c_str());
         break;
       case CXCursor_EnumConstantDecl: 	
         group.emplace_back("EnumConstantDecl", start_line, start_col, spell.c_str());
@@ -478,8 +326,171 @@ namespace color_coded
       case CXCursor_CXXForRangeStmt:
       case CXCursor_DeclStmt:
       default:
-        return CXChildVisit_Recurse;
+        break;
       }
+    }
+
+    class highlight_group
+    {
+      public:
+        using vec_t = std::vector<highlight>;
+        using iterator = vec_t::iterator;
+        using const_iterator = vec_t::const_iterator;
+        using size_type = std::size_t;
+
+        highlight_group() = default;
+        highlight_group(clang::translation_unit const &trans_unit,
+                        clang::token_pack &tokens)
+        {
+#if DUMP_SHIT
+
+          //clang_visitChildren(clang_getTranslationUnitCursor(trans_unit.impl), &cursor::visit, this);
+          //return;
+#endif
+          auto &tu(trans_unit.impl);
+          std::vector<CXCursor> cursors(tokens.size());
+          clang_annotateTokens(tu, tokens.begin(), tokens.size(), cursors.data());
+
+          auto cursor(cursors.cbegin());
+          for(auto token(tokens.cbegin()); token != tokens.cend(); ++token, ++cursor)
+          {
+            CXTokenKind const kind{ clang_getTokenKind(*token) };
+            clang::string const spell{ clang_getTokenSpelling(tu, *token) };
+            auto const loc(clang_getTokenLocation(tu, *token));
+            auto const cursor_kind(cursor->kind);
+            auto const cursor_type(clang_getCursorType(*cursor).kind);
+            CXFile file{};
+            unsigned line{}, column{}, offset{};
+            clang_getFileLocation(loc, &file, &line, &column, &offset);
+            auto const cur(clang_getCursor(tu, loc));
+
+            switch(kind)
+            {
+              case CXToken_Punctuation:
+                emplace_back("Punctuation", line, column, spell.c_str());
+                break;
+              case CXToken_Keyword:
+                emplace_back("Keyword", line, column, spell.c_str());
+                break;
+              case CXToken_Identifier:
+                std::cout << spell.c_str() << ", ";
+                std::cout << clang::string
+                  {clang_getCursorSpelling(*cursor)}.c_str()
+                          << ", ";
+                std::cout << clang::string
+                  {clang_getCursorDisplayName(*cursor)}.c_str()
+                          << ", ";
+                std::cout << clang::string
+                  {clang_getCursorKindSpelling(clang_getCursorKind(*cursor))}.c_str()
+                          << ", ";
+                std::cout << clang::string
+                  {clang_getTypeKindSpelling(clang_getCursorType(*cursor).kind)}.c_str()
+                          << std::endl;
+
+                stuff(*this, *cursor, cursor_kind, cursor_type, line, column, spell);
+                break;
+              case CXToken_Literal:
+                stuff(*this, *cursor, cursor_kind, cursor_type, line, column, spell);
+                break;
+              case CXToken_Comment:
+                emplace_back("Comment", line, column, spell.c_str());
+                break;
+              default:
+                emplace_back("Error", line, column, spell.c_str());
+            }
+          }
+        }
+
+        bool empty() const
+        { return group_.empty(); }
+        size_type size() const
+        { return group_.size(); }
+
+        iterator begin()
+        { return group_.begin(); }
+        const_iterator begin() const
+        { return group_.begin(); }
+        const_iterator cbegin() const
+        { return group_.cbegin(); }
+        iterator end()
+        { return group_.end(); }
+        const_iterator end() const
+        { return group_.end(); }
+        const_iterator cend() const
+        { return group_.cend(); }
+
+        template <typename... Args>
+        void emplace_back(Args &&... args)
+        {
+          std::cout << "adding: ";
+          int const _[]{ (std::cout << args << " ", 0)... };
+          static_cast<void>(_); std::cout << std::endl;
+          group_.emplace_back(std::forward<Args>(args)...);
+        }
+
+      private:
+        std::vector<highlight> group_;
+    };
+  }
+
+  /* TODO: bar<T>() spelling is wrong. */
+  namespace cursor
+  {
+    CXChildVisitResult visit(CXCursor const cursor, CXCursor const parent,
+                             CXClientData const data)
+    {
+      auto &group(*static_cast<vim::highlight_group*>(data));
+      auto const cursor_kind(cursor.kind);
+      auto const cursor_type(clang_getCursorType(cursor).kind);
+      clang::string const spell{ clang_getCursorSpelling(cursor) };
+      auto const loc(clang_getCursorLocation(cursor));
+
+      auto const range(clang_getCursorExtent(cursor));
+      auto const start(clang_getRangeStart(range));
+      auto const end(clang_getRangeEnd(range));
+
+      static CXCursor const null_cursor(clang_getNullCursor());
+      static CXSourceLocation const null_location(clang_getNullLocation());
+      //if(clang_equalLocations(start, null_location) ||
+      //   clang_equalLocations(end, null_location))
+      //{ return CXChildVisit_Recurse; }
+
+      clang::string file{};
+      CXFile cxfile;
+      unsigned start_line{}, start_col{}, start_offset{};
+      unsigned end_line{}, end_col{}, end_offset{};
+      //clang_getPresumedLocation(start, &file.get(), &start_line, &start_col);
+      //clang_getPresumedLocation(end, &file.get(), &end_line, &end_col);
+      //clang_getExpansionLocation(start, &cxfile, &start_line, &start_col, &start_offset);
+      //clang_getExpansionLocation(end, &cxfile, &end_line, &end_col, &end_offset);
+      clang_getSpellingLocation(start, &cxfile, &start_line, &start_col, &start_offset);
+      clang_getSpellingLocation(end, &cxfile, &end_line, &end_col, &end_offset);
+
+#if DUMP_SHIT
+      std::cout << spell.c_str() << ", ";
+      std::cout << start_line << ":" << start_col << " -> "
+                << end_line << ":" << end_col << ", ";
+      std::cout << clang::string
+        {clang_getCursorKindSpelling(clang_getCursorKind(cursor))}.c_str()
+                << ", ";
+      std::cout << clang::string
+        {clang_getTypeKindSpelling(clang_getCursorType(cursor).kind)}.c_str()
+                << ", ";
+      std::cout << clang::string
+        {clang_getCursorDisplayName(cursor)}.c_str()
+                << std::endl;
+      return CXChildVisit_Recurse;
+#endif
+
+      //std::cout 
+      //<< cursor_kind << " "
+      //<< clang::string(clang_getTypeSpelling(
+      //                 clang_getCursorType(cursor))).c_str()
+      //<< " - "
+      //<< clang::string(clang_getTypeKindSpelling(cursor_type)).c_str()
+      //<< " " << cursor_type << " "
+      //<< std::endl;
+
 
       return CXChildVisit_Recurse;
     }
