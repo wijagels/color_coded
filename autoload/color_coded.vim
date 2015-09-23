@@ -4,7 +4,7 @@
 " Setup
 " ------------------------------------------------------------------------------
 
-let s:color_coded_api_version = 0xd21d70f
+let s:color_coded_api_version = 0x5a2548b
 let s:color_coded_valid = 1
 let s:color_coded_unique_counter = 1
 let g:color_coded_matches = {}
