@@ -27,28 +27,48 @@ if(NOT CUSTOM_CLANG)
     endif()
   endif()
 
-  file(DOWNLOAD
-    "${CLANG_URL}/${CLANG_FILENAME}" "./${CLANG_FILENAME}"
-    SHOW_PROGRESS EXPECTED_SHA256 "${CLANG_SHA256}")
+  # Only download if we need to
+  set(CLANG_DOWNLOAD ON)
+  if(EXISTS "${CLANG_FILENAME}")
+    file(SHA256 "${CLANG_FILENAME}" CLANG_FILENAME_SHA256)
+    if("${CLANG_FILENAME_SHA256}" STREQUAL "${CLANG_SHA256}")
+      set(CLANG_DOWNLOAD OFF)
+    else()
+      file(REMOVE "${CLANG_FILENAME}")
+    endif()
+  endif()
 
-  message(STATUS "Found ${CLANG_FILENAME}")
+  if(CLANG_DOWNLOAD)
+    message(STATUS "Downloading Clang ${CLANG_VERSION}")
+    file(DOWNLOAD
+      "${CLANG_URL}/${CLANG_FILENAME}" "./${CLANG_FILENAME}"
+      SHOW_PROGRESS EXPECTED_SHA256 "${CLANG_SHA256}")
+  if(EXISTS ${CLANG_DIRNAME})
+    message(STATUS "Clearing previous extraction")
+    file(REMOVE_RECURSE "${CLANG_DIRNAME}")
+    # The above doesn't always work on OS X
+    execute_process(COMMAND rm -rf "${CLANG_DIRNAME}")
+  endif()
+  else()
+    message(STATUS "Using Clang/LLVM archive: ${CLANG_FILENAME}")
+  endif()
 
-  if(NOT EXISTS ${CLANG_DIRNAME})
+  if(NOT EXISTS "${CLANG_DIRNAME}")
     message(STATUS "Extracting Clang/LLVM ${CLANG_VERSION}")
 
-    execute_process(COMMAND mkdir -p ${CLANG_DIRNAME})
+    execute_process(COMMAND mkdir -p "${CLANG_DIRNAME}")
     if(CLANG_FILENAME MATCHES ".+bz2")
-      execute_process(COMMAND tar -xjf ${CLANG_FILENAME} -C ${CLANG_DIRNAME} --strip-components 1)
+      execute_process(COMMAND tar -xjf "${CLANG_FILENAME}" -C "${CLANG_DIRNAME}" --strip-components 1)
     elseif(CLANG_FILENAME MATCHES ".+xz")
-      execute_process(COMMAND tar -xJf ${CLANG_FILENAME} -C ${CLANG_DIRNAME} --strip-components 1)
+      execute_process(COMMAND tar -xJf "${CLANG_FILENAME}" -C "${CLANG_DIRNAME}" --strip-components 1)
     else()
-      execute_process(COMMAND tar -xzf ${CLANG_FILENAME} -C ${CLANG_DIRNAME} --strip-components 1)
+      execute_process(COMMAND tar -xzf "${CLANG_FILENAME}" -C "${CLANG_DIRNAME}" --strip-components 1)
     endif()
   else()
     message(STATUS "Clang/LLVM ${CLANG_VERSION} already extracted")
   endif()
 
-  set(LLVM_ROOT_PATH ${CMAKE_CURRENT_BINARY_DIR}/${CLANG_DIRNAME})
+  set(LLVM_ROOT_PATH "${CMAKE_CURRENT_BINARY_DIR}/${CLANG_DIRNAME}")
 
 else()
   if(NOT LLVM_ROOT_PATH)
@@ -59,13 +79,13 @@ else()
 endif()
 
 if(NOT LLVM_INCLUDE_PATH)
-  set(LLVM_INCLUDE_PATH ${LLVM_ROOT_PATH}/include)
+  set(LLVM_INCLUDE_PATH "${LLVM_ROOT_PATH}/include")
 endif()
 if(NOT LLVM_LIB_PATH)
-  set(LLVM_LIB_PATH ${LLVM_ROOT_PATH}/lib)
+  set(LLVM_LIB_PATH "${LLVM_ROOT_PATH}/lib")
 endif()
 
 add_custom_target(clean_clang
-  COMMAND rm -rf ${CLANG_FILENAME} ${CLANG_DIRNAME}
+  COMMAND rm -rf "${CLANG_FILENAME}" "${CLANG_DIRNAME}"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
